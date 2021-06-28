@@ -17,7 +17,3 @@
 # License
 
 ``MIT``
-
----
-
-## Use pycharm
