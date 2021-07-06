@@ -12,7 +12,7 @@ headers = {
 
 
 def get_src():
-    #f12 手机端 iphone8p
+    #f12 手机端
     h_url = 'http://gx.httpcn.com/book/daodejing/quanwen/'
     newslist = requests.get(h_url, headers=headers)
     soup = BeautifulSoup(newslist.text, "lxml")
