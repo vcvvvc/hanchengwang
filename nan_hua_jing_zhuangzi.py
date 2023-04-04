@@ -2,9 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import re
-import threading
 import time
-#https://guoxue.httpcn.com/book/b62639b63ed94ffbbed05b3868ebfb53/
 
 headers = {
     'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
@@ -13,7 +11,7 @@ headers = {
 
 
 def get_src():
-    h_url = 'https://guoxue.httpcn.com/book/b62639b63ed94ffbbed05b3868ebfb53/'
+    h_url = 'https://guoxue.httpcn.com/book/71b8532729f248408c90484587f4fd9a/'
     newslist = requests.get(h_url, headers=headers)
     soup = BeautifulSoup(newslist.text, "lxml")
     return soup
@@ -36,12 +34,10 @@ def run():
     for li in title_list:
         for m_url in title_list[li]:
             m_url = m_url.replace('//', 'http://')
-            t1 = threading.Thread(target=get_content, args=(m_url, li, ))
-            t1.start()
+            get_content(m_url, li)
             time.sleep(8)
-            t1.join()
 
-lock = threading.Lock()
+
 def get_content(m_url, m_title):
     newslist = requests.get(m_url, headers=headers)
     soup = BeautifulSoup(newslist.text, "lxml")
@@ -58,25 +54,16 @@ def get_content(m_url, m_title):
                 m_font = m_font.replace('<p>', '')
                 m_font = m_font.replace('</p>', '')
                 m_str = m_str + m_font
+            m_str = m_str + '\n'
         print(m_str)
 
-    # datalist2 = soup.find_all(class_='yd-list yd-list-theme1 ')
-    # m_zhu = ""
-    # m_yi = "" #注释 译文
-    # for list in datalist2:
-    #     m_zhu = m_yi
-    #     m_yi = list.get_text()
-
-
-    lock.acquire()
-    filename = "孙子兵法.txt"
+    filename = "南华经.txt"
     with open(filename, "a+", encoding='utf-8') as f:
         f.write(m_title + "\n")
         f.write(m_str + "\n \n")
         # f.write("注释: \n" + m_zhu + "\n")
-        # f.write("译文: \n" + m_yi + "\n")
+        # f.write("译文: \n" + m_yi + "\n")1
         f.write("\n\n")
-    lock.release()
 
 
 if __name__ == '__main__':

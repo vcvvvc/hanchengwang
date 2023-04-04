@@ -13,7 +13,7 @@ headers = {
 
 
 def get_src():
-    h_url = 'https://guoxue.httpcn.com/book/d36a3399c1d944bea7fc16c21c6fe6b4/'
+    h_url = 'https://guoxue.httpcn.com/book/b62639b63ed94ffbbed05b3868ebfb53/'
     newslist = requests.get(h_url, headers=headers)
     soup = BeautifulSoup(newslist.text, "lxml")
     return soup
@@ -36,10 +36,8 @@ def run():
     for li in title_list:
         for m_url in title_list[li]:
             m_url = m_url.replace('//', 'http://')
-            t1 = threading.Thread(target=get_content, args=(m_url, li, ))
-            t1.start()
+            get_content(m_url, li)
             time.sleep(8)
-            t1.join()
 
 lock = threading.Lock()
 def get_content(m_url, m_title):
@@ -69,7 +67,7 @@ def get_content(m_url, m_title):
 
 
     lock.acquire()
-    filename = "三十六计.txt"
+    filename = "孙子兵法.txt"
     with open(filename, "a+", encoding='utf-8') as f:
         f.write(m_title + "\n")
         f.write(m_str + "\n \n")
@@ -80,7 +78,7 @@ def get_content(m_url, m_title):
 
 
 if __name__ == '__main__':
-    soup = get_src() #get三十六计
+    soup = get_src() #get孙子兵法
     get_hancheng(soup)
     run()
     print("end")
