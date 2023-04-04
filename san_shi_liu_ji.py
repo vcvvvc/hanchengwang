@@ -2,9 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import re
-import threading
 import time
-#https://guoxue.httpcn.com/book/b62639b63ed94ffbbed05b3868ebfb53/
 
 headers = {
     'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
@@ -39,7 +37,6 @@ def run():
             get_content(m_url, li)
             time.sleep(8)
 
-lock = threading.Lock()
 def get_content(m_url, m_title):
     newslist = requests.get(m_url, headers=headers)
     soup = BeautifulSoup(newslist.text, "lxml")
@@ -66,7 +63,6 @@ def get_content(m_url, m_title):
     #     m_yi = list.get_text()
 
 
-    lock.acquire()
     filename = "三十六计.txt"
     with open(filename, "a+", encoding='utf-8') as f:
         f.write(m_title + "\n")
@@ -74,7 +70,6 @@ def get_content(m_url, m_title):
         # f.write("注释: \n" + m_zhu + "\n")
         # f.write("译文: \n" + m_yi + "\n")
         f.write("\n\n")
-    lock.release()
 
 
 if __name__ == '__main__':
