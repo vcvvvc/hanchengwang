@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import re
-import threading
 import time
 
 headers = {
@@ -38,12 +37,9 @@ def run():
     for li in title_list:
         for m_url in title_list[li]:
             m_url = m_url.replace('//', 'http://')
-            t1 = threading.Thread(target=get_content, args=(m_url, li, ))
-            t1.start()
-            time.sleep(3)
-            t1.join()
+            get_content(m_url, li)
+            time.sleep(8)
 
-lock = threading.Lock()
 def get_content(m_url, m_name):
 
     newslist = requests.get(m_url, headers=headers)
@@ -69,7 +65,6 @@ def get_content(m_url, m_name):
         m_yi = list.get_text()
 
 
-    lock.acquire()
     filename = "道德经.txt"
     with open(filename, "a+", encoding='utf-8') as f:
         f.write(str(m_name) + "\n")
@@ -77,7 +72,6 @@ def get_content(m_url, m_name):
         f.write("注释: \n" + m_zhu + "\n")
         f.write("译文: \n" + m_yi + "\n")
         f.write("\n\n\n")
-    lock.release()
 
 
 if __name__ == '__main__':
